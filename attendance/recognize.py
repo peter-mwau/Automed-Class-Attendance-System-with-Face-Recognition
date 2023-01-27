@@ -90,6 +90,10 @@ def runFile():
                         writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
                         for data in dict:
                             writer.writerow(data)
+                            update = Lecturer_detail.create_table(csv_name)
+                            # print(update)
+                            update.save()
+
                     # f.writelines(str(dict))
                 except Lecturer_detail.DoesNotExist:
                     print("user not found in database")

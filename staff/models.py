@@ -21,3 +21,21 @@ class Lecturer_detail(models.Model):
 
 
 
+#  A function to create a table in database and commit data from csv file to database with the specified columns
+    @classmethod
+    def create_table(cls, csv_name):
+        import csv
+        from attendance import recognize
+        csv_name = 'attendance.csv'
+        with open(csv_name, 'r') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                # print(row)
+                _, created = cls.objects.update_or_create(
+                    Full_Name=row[0],
+                    Lecturer_ID=row[1],
+                    Department=row[2],
+                    Unit=row[3],
+                    Faculty=row[4],
+                    Date=row[5],
+                )
