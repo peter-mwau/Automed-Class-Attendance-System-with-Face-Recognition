@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    path('capture/', views.takeAttendance),
+    # path('capture/', views.takeAttendance),
     # path('/templates/', views.reporting)
 ] 
 

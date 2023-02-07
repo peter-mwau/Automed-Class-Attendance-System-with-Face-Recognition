@@ -8,10 +8,12 @@ from datetime import datetime
 import sqlite3
 import pathlib
 from staff.models import Lecturer_detail
+from attendance.models import Student_detail
 from django.db.models import query_utils
 from django.http import HttpResponse
 from django.core.files import File
 import csv
+from reports.views import commit_to_db
 
 
 
@@ -69,35 +71,45 @@ def runFile():
             
             #split name into first and last name on underscore
             name_ = name.split('_')
-            csv_columns = ['Full_Name','Lecturer_ID','Department','Unit','Faculty','Date']
+            
+            csv_columns = ['Full_Name','Lecturer_ID','Department','Category','Unit','Faculty','Date']
+            # csv_columns2 = ['Full_Name','Reg_no','Course','Cohort','Category','Unit','Faculty','Date']
 
             if user_exist==0: #  user not found, add user
                 try:
-                    lec_details = Lecturer_detail.getLecturer(name_[0],name_[1])
-                    items = lec_details
+                    lec_details = Lecturer_detail.getLecturer(name_[0], name_[1])
+                    # stud_detail = Student_detail.getStudent(name_[0],name_[1])
+                    items = lec_details 
                     now = datetime.now()
                     dtstring = now.strftime("%Y-%m-%d %H:%M:%S")
-          
 
-                    dict = [{'Full_Name': lec_details.fname+' '+lec_details.lname,
-                            'Lecturer_ID': lec_details.lecturer_id,
-                            'Department': lec_details.department,
-                            'Unit': lec_details.units_teaching,
-                            'Faculty': lec_details.faculty,
-                            'Date': dtstring}]
                     
+                    dict = [
+                        {'Full_Name': lec_details.fname+' '+lec_details.lname,
+                        'Category': lec_details.category,
+                        'Date': dtstring,
+                        'Department': lec_details.department,
+                        'Faculty': lec_details.faculty,
+                        'Unit': lec_details.units_teaching,
+                        'Lecturer_ID': lec_details.lecturer_id
+                        }]
                     with open(csv_name, 'a') as csvfile:
                         writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
                         for data in dict:
                             writer.writerow(data)
-                            update = Lecturer_detail.create_table(csv_name)
+                            commit_to_db(csv_name)
+                            # user_exist = 0
+
+                            # Lecturer_detail.create_table(csv_name)
                             # print(update)
-                            update.save()
+                            # update.save()
+        
 
                     # f.writelines(str(dict))
-                except Lecturer_detail.DoesNotExist:
+                except Lecturer_detail.DoesNotExist or Student_detail.DoesNotExist:
                     print("user not found in database")
                 user_exist = 0
+
            
             # if name not in nameList:
             #     lec_details = Lecturer_detail.objects.all().values()
