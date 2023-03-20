@@ -62,6 +62,58 @@ def markAttendance(name):
                     ]
                     f.writelines((f'\n{dict}'))
 
+                #     if user_exist==0: #  user not found, add user
+                # try:
+                #     lec_details = Lecturer_detail.getLecturer(name_[0], name_[1])
+                #     stud_detail = Student_detail.getStudent(name_[0],name_[1])
+                #     # items = lec_details 
+                #     now = datetime.now()
+                #     dtstring = now.strftime("%Y-%m-%d %H:%M:%S")
+                #     # dtstring = now.strftime("%Y-%m-%d")
+
+                    
+                #     dict = [
+                #         {'Full_Name': lec_details.fname+' '+lec_details.lname,
+                #         'Category': lec_details.category,
+                #         'Date': dtstring,
+                #         'Department': lec_details.department,
+                #         'Faculty': lec_details.faculty,
+                #         'Unit': lec_details.units_teaching,
+                #         'Lecturer_ID': lec_details.lecturer_id
+                #         }]
+                #     with open(csv_name, 'a') as csvfile:
+                #         writer = csv.DictWriter(csvfile, fieldnames= csv_columns)
+                #         for data in dict:
+                #             writer.writerow(data)
+                #             read_csv(csv_name)
+                #             #reset user_exist to 0
+                #             user_exist = 0
+                #             f.truncate(0)
+                #             # clear
+                #     dict1 = [
+                #         {'Full_Name': stud_detail.fname+' '+stud_detail.lname,
+                #         'Reg_no': stud_detail.reg_no,
+                #         'Course': stud_detail.course,
+                #         'Cohort': stud_detail.cohort,
+                #         'Category': stud_detail.category,
+                #         'Unit': stud_detail.units,
+                #         # 'Faculty': stud_detail.faculty,
+                #         'Date': dtstring
+                #         }]
+                #     # category = lec_details.category or stud_detail.category
+                #     with open(csv_name2, 'a') as csvfile:
+                #         writer = csv.DictWriter(csvfile, fieldnames=csv_columns2)
+                #         # for data in dict1:
+                #         print(dict1)
+                #         for data in dict1:
+                #             writer.writerow(data)  
+                #             read_csv2(csv_name2)
+                #             #reset user_exist to 0
+                #             user_exist = 0
+                #             # clear csv file
+                #             f.truncate(0)
+                            
+
 
 
 encodeListKnown = findEncodings(images)

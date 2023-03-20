@@ -13,7 +13,11 @@ from django.db.models import query_utils
 from django.http import HttpResponse
 from django.core.files import File
 import csv
-from reports.views import commit_to_db
+from reports.views import read_csv2, read_csv
+# from reports.views import commit_to_db
+# from .views import camera
+
+
 
 
 
@@ -44,13 +48,14 @@ def runFile():
         encodeList = []
         for img in images:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            encode = face_recognition.face_encodings(img)[0]
+            encode = face_recognition.face_encodings(img)[0] 
             encodeList.append(encode)
         return encodeList
 
     def markAttendance(name):
-        csv_name = 'attendance.csv'
-        with open(csv_name,'r+') as f:
+        # csv_name = 'attendance.csv'
+        csv_name2 = 'attendance2.csv'
+        with open(csv_name2,'r+') as f:
             myDataList = f.readlines()
             nameList = []
             user_exist = 0
@@ -72,37 +77,52 @@ def runFile():
             #split name into first and last name on underscore
             name_ = name.split('_')
             
-            csv_columns = ['Full_Name','Lecturer_ID','Department','Category','Unit','Faculty','Date']
-            # csv_columns2 = ['Full_Name','Reg_no','Course','Cohort','Category','Unit','Faculty','Date']
+            # csv_columns = ['Full_Name','Category','Date','Department','Faculty','Unit','Lecturer_ID']
+            csv_columns2 = ['Full_Name','Reg_no','Course','Cohort','Category','Unit','Date']
 
             if user_exist==0: #  user not found, add user
                 try:
-                    lec_details = Lecturer_detail.getLecturer(name_[0], name_[1])
-                    # stud_detail = Student_detail.getStudent(name_[0],name_[1])
-                    items = lec_details 
+                    # lec_details = Lecturer_detail.getLecturer(name_[0], name_[1])
+                    stud_detail = Student_detail.getStudent(name_[0],name_[1])
+                    # items = lec_details 
                     now = datetime.now()
                     dtstring = now.strftime("%Y-%m-%d %H:%M:%S")
+                    # dtstring = now.strftime("%Y-%m-%d")
+                    
 
                     
-                    dict = [
-                        {'Full_Name': lec_details.fname+' '+lec_details.lname,
-                        'Category': lec_details.category,
-                        'Date': dtstring,
-                        'Department': lec_details.department,
-                        'Faculty': lec_details.faculty,
-                        'Unit': lec_details.units_teaching,
-                        'Lecturer_ID': lec_details.lecturer_id
+                    # dict = [
+                    #     {'Full_Name': lec_details.fname+' '+lec_details.lname,
+                    #     'Category': lec_details.category,
+                    #     'Date': dtstring,
+                    #     'Department': lec_details.department,
+                    #     'Faculty': lec_details.faculty,
+                    #     'Unit': lec_details.units_teaching,
+                    #     'Lecturer_ID': lec_details.lecturer_id
+                    #     }]
+                  
+                    dict1 = [
+                        {'Full_Name': stud_detail.fname+' '+stud_detail.lname,
+                        'Reg_no': stud_detail.reg_no,
+                        'Course': stud_detail.course,
+                        'Cohort': stud_detail.cohort,
+                        'Category': stud_detail.category,
+                        'Unit': stud_detail.units,
+                        # 'Faculty': stud_detail.faculty,
+                        'Date': dtstring
                         }]
-                    with open(csv_name, 'a') as csvfile:
-                        writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-                        for data in dict:
+                    with open(csv_name2, 'a') as csvfile:
+                        writer = csv.DictWriter(csvfile, fieldnames= csv_columns2)
+                        for data in dict1 or dict:
                             writer.writerow(data)
-                            commit_to_db(csv_name)
-                            # user_exist = 0
-
-                            # Lecturer_detail.create_table(csv_name)
-                            # print(update)
-                            # update.save()
+                            read_csv2(csv_name2)
+                           
+                            #reset user_exist to 0
+                            user_exist = 0
+                            f.truncate(0)
+                            
+                   
+                            
         
 
                     # f.writelines(str(dict))
@@ -110,39 +130,23 @@ def runFile():
                     print("user not found in database")
                 user_exist = 0
 
-           
-            # if name not in nameList:
-            #     lec_details = Lecturer_detail.objects.all().values()
-            #     # array = []
-            #     now = datetime.now()
-            #     dtstring = now.strftime("%Y-%m-%d %H:%M:%S")
-            #     # array.append(f'/n{lec_details}')
-            #     # f.writelines((f'{"Name"},{"Date"}'))
-            #     for item in lec_details:
-            #         dict = [
-            #             {'Full_Name': item['fname']+item[' lname']},
-            #             {'Lecturer_ID': item['lecturer_id']},
-            #             { 'Department': item['department']},
-            #             {'Unit': item['units_teaching']},
-            #             {'Faculty': item['faculty']},
-            #             {'Date': dtstring}
-            #         ]
-            #         f.writelines((f'{dict}'))
-                    # f.writelines((f'\n{item},{dtstring}'))
 
 
-
-    encodeListKnown = findEncodings(images)
+    encodeListKnown = findEncodings(images) 
     print("Encoding Complete")
 
-    capture = cv2.VideoCapture(0)
+    capture = cv2.VideoCapture(0) 
     cv2.waitKey(1)
 
+    #what algorithm to use to find the faces
+    # faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+
     while True:
-        success, img = capture.read()
-        # cv2.imshow("Video", img)
-        imgS = cv2.resize(img,(0,0),None,0.25,0.25)
-        imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
+        success, img = capture.read() 
+        # cv2.imshow("Video", img) 
+        imgS = cv2.resize(img,(0,0),None,0.25,0.25) 
+        # imgS = cv2.resize(img,(0,0),None,0.25,0.25)
+        imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB) 
 
         facesCurFrame = face_recognition.face_locations(imgS)
         encodesCurFrame = face_recognition.face_encodings(imgS,facesCurFrame)

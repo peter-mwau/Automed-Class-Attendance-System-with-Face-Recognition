@@ -24,3 +24,8 @@ class Student_detail(models.Model):
     def getStudent(cls,first,second):
         results = cls.objects.get(fname = first, lname = second)
         return results
+    
+# a class of choosing camera
+# class selectCameraForm(models.Model):
+#     # create a select field
+#     camera = models.

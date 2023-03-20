@@ -1,55 +1,23 @@
-# from .models import  Lecturer_report
-# from django.shortcuts import render, redirect
-# from django.http import HttpResponse
+from .models import  Lecturer_report, Student_report
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 
 # #read data from csv_name and save to database
-# def read_csv(csv_name):
-#     with open(csv_name,'r+') as f:
-#         myDataList = f.readlines()
-#         nameList = []
-#         user_exist = 0
-#         for line in myDataList:
-#             entry = line.split(',')
-#             # print(entry)
-#             nameList.append(entry[0])
-#             # print(entry[0])
-#         for user in nameList:
-#             user =  user.replace(" ","_")
-#             if user_exist==0:
-#                 print("user is found in database")
-#                 user_exist = 1
-#                 #save to database
-#                 name = user
-#                 department = entry[1]
-#                 category = entry[2]
-#                 unit = entry[3]
-#                 faculty = entry[4]
-#                 date = entry[5]
-#                 # print(name)
-#                 # print(department)
-#                 # print(category)
-#                 # print(unit)
-#                 # print(faculty)
-#                 # print(date)
-#                 #save to database
-#                 report = Lecturer_report(name=name,department=department,category=category,unit=unit,faculty=faculty,date=date)
-#                 report.save()
-#                 print("data saved to database")
+def read_csv(csv_name):
+    with open(csv_name, 'r') as file:
+        no_records = 0
+        for row in file:
+            print(row.split(',')[0])
+            Lecturer_report.objects.create(name=row.split(',')[0], category=row.split(',')[1], date=row.split(',')[2], department=row.split(',')[3], faculty=row.split(',')[4], unit=row.split(',')[5], lecturer_id=row.split(',')[6])
+            no_records += 1
+    print('\n{} Records inserted successfully'.format(no_records))
 
-import csv, sqlite3
-from django.shortcuts import render, redirect
-
-def commit_to_db(csv_name):
-   connection = sqlite3.connect("project.sqlite3")
-   cursor = connection.cursor()
-
-   with open(csv_name, 'r') as file:
-    no_records = 0
-    for row in file:
-        # print(row.split(',')[0])
-        # cursor.execute("INSERT INTO reports_lecturer_report VALUES (?, ?, ?, ?, ?, ?, ?)", row.split(','))
-        cursor.execute("INSERT INTO reports_lecturer_report (name, department, category, unit, faculty, date, lecturer_id) VALUES (?, ?, ?, ?, ?, ?, ?)", row.split(','))
-        connection.commit()
-        no_records += 1
-   connection.close()
-   print('\n{} Records inserted successfully'.format(no_records))
+# read data from csv_name and save to student report table in database
+def read_csv2(csv_name):
+    with open(csv_name, 'r') as file:
+        no_records = 0
+        for row in file:
+            print(row.split(',')[0])
+            Student_report.objects.create(stud_names=row.split(',')[0], reg_no=row.split(',')[1], course=row.split(',')[2], cohort=row.split(',')[3], category=row.split(',')[4], unit=row.split(',')[5], dateofattendance=row.split(',')[6])
+            no_records += 1
+    print('\n{} Records inserted successfully'.format(no_records))

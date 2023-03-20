@@ -9,14 +9,27 @@ class Lecturer_report(models.Model):
     category = models.CharField(max_length=100)
     unit = models.CharField(max_length=100)
     faculty = models.CharField(max_length=100, null=True)
-    date = models.DateField(default="2016-09-23")
+    # a date field which accepts "yyyy-mm-dd h-m-s format"
+    date = models.CharField(max_length=100)
     lecturer_id = models.IntegerField(null=True)
+
+    @classmethod
+    def getLecturerReport(cls,first,second):
+        results = cls.objects.get(fname = first, lname = second)
+        return results
     
 
-# class Student_report(models.Model):
-#     stud_names = models.CharField(max_length=100)
-#     reg_no = models.CharField(max_length=100)
-#     picture = models.ImageField(upload_to='images')
-#     course = models.CharField(max_length=100)
-#     cohort = models.CharField(max_length=100)
-#     dateofattendance = models.DateField(auto_now=True)
+class Student_report(models.Model):
+    stud_names = models.CharField(max_length=100)
+    reg_no = models.CharField(max_length=100)
+    category = models.CharField(max_length=100)
+    # faculty = models.CharField(max_length=100)
+    course = models.CharField(max_length=100)
+    cohort = models.CharField(max_length=100)
+    unit = models.CharField(max_length=100)
+    dateofattendance = models.CharField(max_length=100)
+
+    @classmethod
+    def getStudentReport(cls,first,second):
+        results = cls.objects.get(fname = first, lname = second)
+        return results

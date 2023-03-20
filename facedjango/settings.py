@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-vo7$06iq(f2w#m4zj9^7uy45a@0^-i6l$csz+#i034nxitgnc%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0']
 
 
 # Application definition
@@ -81,9 +81,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'project.sqlite3',
-        'USER': 'postgres',
-        'PASSWORD': 'mynewpassword',
-        'HOST': 'localhost',
     }
 }
 
