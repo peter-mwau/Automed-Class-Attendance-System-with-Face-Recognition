@@ -7,7 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('attendance.urls')),
     # path('', include('attendance.urls')),
-    path('reports/', include('reports.urls')),
+    path('', include('reports.urls')),
     path('', include('django.contrib.auth.urls')),
 ]
 #    path('templates/', include('attendance.urls')),

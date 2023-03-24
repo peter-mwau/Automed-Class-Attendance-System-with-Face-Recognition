@@ -2,6 +2,7 @@ from .models import  Lecturer_report, Student_report
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
+
 # #read data from csv_name and save to database
 def read_csv(csv_name):
     with open(csv_name, 'r') as file:
@@ -21,3 +22,12 @@ def read_csv2(csv_name):
             Student_report.objects.create(stud_names=row.split(',')[0], reg_no=row.split(',')[1], course=row.split(',')[2], cohort=row.split(',')[3], category=row.split(',')[4], unit=row.split(',')[5], dateofattendance=row.split(',')[6])
             no_records += 1
     print('\n{} Records inserted successfully'.format(no_records))
+
+
+
+
+
+
+
+
+  

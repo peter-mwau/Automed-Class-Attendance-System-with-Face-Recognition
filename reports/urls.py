@@ -3,8 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    # path('lec_reports', views.reports),
-    # path('/templates/', views.reporting)
+    # path('dashboard/', views.analysis, name='analysis'),
 ] 
 
-    # path('home/', views.takeAttendance),
+

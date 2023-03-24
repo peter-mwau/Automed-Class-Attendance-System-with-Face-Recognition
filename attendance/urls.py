@@ -17,5 +17,5 @@ urlpatterns = [
     path('register_user/', views.register_user, name='register_user'),
     path('dashboard/capture/', views.capture, name='capture'),
     path('capture/', views.reports, name='take_attendance'),
-    # path('attendance/templates/attendance.csv', views.reports),
+    # path('graph/', views.graph, name='graph'),
 ] 

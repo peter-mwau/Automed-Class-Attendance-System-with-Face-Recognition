@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 # from django. contrib import auth
 
 from django.contrib import messages
+import datetime
 
 from multiprocessing import context
 from xml.etree.ElementInclude import include
@@ -26,6 +27,9 @@ from staff.models import Lecturer_detail
 from . models import Student_detail
 from reports.models import Lecturer_report, Student_report
 from django.template import loader
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 # from reports.recognize import runFile
 
@@ -98,7 +102,25 @@ def home(request):
     #         # redirect to capture with camera as parameter
     #         return redirect('reports', camera) 
 
-     
+    #  select from the students report table where the dateofattendance is today
+    today_student_attendance = Student_report.objects.filter(dateofattendance=datetime.date.today())
+    # get the total number of students whose attendance has been taken today
+    today_students = today_student_attendance.count()
+    # select from the lecturers report table where the dateofattendance is today
+    today_lecturer_attendance = Lecturer_report.objects.filter(date=datetime.date.today())
+    # get the total number of lecturers whose attendance has been taken today
+    today_lecturers = today_lecturer_attendance.count()
+    today_attendance = today_lecturers + today_students
+
+    # select from the students report table where the dateofattendance is last seven days
+    last_seven_days_student_attendance = Student_report.objects.filter(dateofattendance__range=[datetime.date.today() - datetime.timedelta(days=7), datetime.date.today()])
+    # get the total number of students whose attendance has been taken in the last seven days
+    last_seven_days_students = last_seven_days_student_attendance.count()
+    # select from the lecturers report table where the dateofattendance is last seven days
+    last_seven_days_lecturer_attendance = Lecturer_report.objects.filter(date__range=[datetime.date.today() - datetime.timedelta(days=7), datetime.date.today()])
+    # get the total number of lecturers whose attendance has been taken in the last seven days
+    last_seven_days_lecturers = last_seven_days_lecturer_attendance.count()
+    week_attendance = last_seven_days_lecturers + last_seven_days_students
 
     # get total number of students in the Student_detail table
     total_students = Student_report.objects.count()
@@ -167,7 +189,7 @@ def home(request):
             'date_joined': 'Guest',
         }]
     
-    context = {'name':name, 'total_students':total_students, 'total_lecturers':total_lecturers, 'total_attendance':total_attendance, 'dict':dict}
+    context = {'name':name, 'total_students':total_students, 'total_lecturers':total_lecturers, 'total_attendance':total_attendance,'today_lec_attendance':today_lecturers,'today_stud_attendance':today_students, 'today_attendance':today_attendance,'week_lec_attendance':last_seven_days_lecturers,'week_stud_attendance':last_seven_days_students, 'week_attendance':week_attendance,'dict':dict}
     return render(request, 'dashboard.html', context)
 
 
@@ -205,6 +227,26 @@ def reports(request):
 def capture(request):
     context={}
     return render(request, 'capture.html', context)
+
+
+# def graph(request):
+#     # get the data from the database and draw a graph using either DataFram or Matplotlib
+#     student = Student_report.objects.all()
+#     lecturer = Lecturer_report.objects.all()
+
+#     # create a dataframe from the data
+#     df = pd.DataFrame(student.values())
+#     df2 = pd.DataFrame(lecturer.values())
+#     plt.title('Attendance Analysis')
+#     plt.xlabel('Days')
+#     plt.ylabel('Attendance')
+#     plt.plot(df, df2)
+
+#     context = {
+#         'plot': plt.plot(df, df2)
+#     }
+
+#     return render(request, 'dashboard.html', context)
 
 # get first_name and last_name from auth_user table and compare with first_name and last_name from student_detail table if they match display in the dashboard
 # def student(request):
@@ -298,7 +340,6 @@ def capture(request):
     #     return render(request, 'dashboard.html', context)
     
   
-
 
 
 
