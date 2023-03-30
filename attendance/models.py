@@ -21,8 +21,8 @@ class Student_detail(models.Model):
 # return datetime.datetime.fromisoformat(value.toString())
 
     @classmethod
-    def getStudent(cls,first,second):
-        results = cls.objects.get(fname = first, lname = second)
+    def getStudent(cls,first,second): 
+        results = cls.objects.get(fname = first, lname = second) 
         return results
     
 # a class of choosing camera

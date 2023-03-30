@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Dashboard</title>
+</head>
+<body>
+    {% comment %} style a table with 7 columns and auto rows {% endcomment %}
+    <table class="table-auto">
+        <thead>
+            <tr>
+                <th class="px-4 py-2">ID</th>
+                <th class="px-4 py-2">Name</th>
+                <th class="px-4 py-2">RegNo</th>
+                <th class="px-4 py-2">Category</th>
+                <th class="px-4 py-2">Course/Department</th>
+                <th class="px-4 py-2">Cohort/Faculty</th>
+                <th class="px-4 py-2">Units</th>
+                <th class="px-4 py-2">Date of Attendance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in student %}
+            <tr class='ml-2'>
+                <td class="border px-5 py-4">{{ user.id }}</td>
+                <td class="border px-5 py-4">{{ user.stud_names }}</td>
+                <td class="border px-5 py-4">{{ user.reg_no }}</td>
+                <td class="border px-5 py-4">{{ user.category }}</td>
+                <td class="border px-5 py-4">{{ user.course }}</td>
+                <td class="border px-5 py-4">{{ user.cohort }}</td>
+                <td class="border px-5 py-4">{{ user.unit}}</td>
+                <td class="border px-5 py-4">{{ user.dateofattendance }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% for user in lecturer %}
+            <tr class='ml-2'>
+                <td class="border px-5 py-4">{{ user.id }}</td>
+                <td class="border px-5 py-4">{{ user.name }}</td>
+                <td class="border px-5 py-4">{{ user.lecturer_id }}</td>
+                <td class="border px-5 py-4">{{ user.category }}</td>
+                <td class="border px-5 py-4">{{ user.department }}</td>
+                <td class="border px-5 py-4">{{ user.faculty }}</td>
+                <td class="border px-5 py-4">{{ user.unit}}</td>
+                <td class="border px-5 py-4">{{ user.date }}</td>
+            </tr>
+            {% endfor %}
+    </table>
+</body>

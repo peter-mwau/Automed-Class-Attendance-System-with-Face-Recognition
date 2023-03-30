@@ -14,8 +14,8 @@ class CreateUserForm(UserCreationForm):
         # fields = '_all_'
         fields = ['username','email','first_name','last_name', 'password1', 'password2']
 
-# class selectCameraForm(forms.Form):
-#     # create a select field
-#     camera = forms.ChoiceField(choices=[('0','Webcam'), ('1','External Camera')], widget=forms.Select(attrs={'class': 'form-control'}))
-#     # submit button
+class selectCameraForm(forms.Form):
+    # create a select field
+    camera = forms.ChoiceField(choices=[('0','Webcam'), ('1','External Camera')], widget=forms.Select(attrs={'class': 'form-control'}))
+    # submit button
     

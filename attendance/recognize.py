@@ -13,6 +13,9 @@ from django.db.models import query_utils
 from django.http import HttpResponse
 from django.core.files import File
 import csv
+from itertools import chain
+from django.db.models.functions import Concat
+from django.db.models import Value
 from reports.views import read_csv2, read_csv
 # from reports.views import commit_to_db
 # from .views import camera
@@ -130,13 +133,14 @@ def runFile():
                     print("user not found in database")
                 user_exist = 0
 
-
-
+ 
     encodeListKnown = findEncodings(images) 
     print("Encoding Complete")
 
     capture = cv2.VideoCapture(0) 
     cv2.waitKey(1)
+    # capture.release()
+    # cv2.destroyAllWindows()
 
     #what algorithm to use to find the faces
     # faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")

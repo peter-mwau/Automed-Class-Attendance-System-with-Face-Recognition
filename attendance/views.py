@@ -19,7 +19,7 @@ from django import views, forms
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from .forms import CreateUserForm
+from .forms import CreateUserForm, selectCameraForm
 
 from attendance.recognize import runFile
 
@@ -86,7 +86,7 @@ def logout_user(request):
 
     
 def home(request):
-    context = {}
+    # context = {}
     # form = selectCameraForm(initial={'camera': '0'})
     # if request.method == 'POST':
     #     form = selectCameraForm(request.POST)
@@ -99,13 +99,17 @@ def home(request):
     #         else:
     #             camera = 1
     #         print(camera)
-    #         # redirect to capture with camera as parameter
-    #         return redirect('reports', camera) 
+            # redirect to capture with camera as parameter
+            # return redirect('reports', camera) 
 
-    #  select from the students report table where the dateofattendance is today
+    #  select from the students report table where the dateofattendance is today interms of datetime
     today_student_attendance = Student_report.objects.filter(dateofattendance=datetime.date.today())
+    # print(today_student_attendance)  
+    # to print today's date in the format of year-month-day-hour-minute-second
+    # print(datetime.date.today().strftime("%Y-%m-%d %H:%M:%S")) 
     # get the total number of students whose attendance has been taken today
     today_students = today_student_attendance.count()
+    # print(today_students)
     # select from the lecturers report table where the dateofattendance is today
     today_lecturer_attendance = Lecturer_report.objects.filter(date=datetime.date.today())
     # get the total number of lecturers whose attendance has been taken today
@@ -189,7 +193,7 @@ def home(request):
             'date_joined': 'Guest',
         }]
     
-    context = {'name':name, 'total_students':total_students, 'total_lecturers':total_lecturers, 'total_attendance':total_attendance,'today_lec_attendance':today_lecturers,'today_stud_attendance':today_students, 'today_attendance':today_attendance,'week_lec_attendance':last_seven_days_lecturers,'week_stud_attendance':last_seven_days_students, 'week_attendance':week_attendance,'dict':dict}
+    context = {'name':name, 'total_students':total_students, 'total_lecturers':total_lecturers, 'total_attendance':total_attendance,'today_lecturers':today_lecturers,'today_students':today_students, 'today_attendance':today_attendance,'week_lec_attendance':last_seven_days_lecturers,'week_stud_attendance':last_seven_days_students, 'week_attendance':week_attendance,'dict':dict}
     return render(request, 'dashboard.html', context)
 
 
@@ -215,75 +219,19 @@ def register_user(request):
         # password for account 'punisher':'punisherdefrgthuj'
         # password for account 'hamisimahamud':'lkjhgfdsa123'
         # password for account 'Cristiano_Ronaldo':'zxcvbnmmnbvcxz'
+        # password for account 'thegoat_mwenyewe': 'asdfghjkllkjhgfdsa'
+        # password for account 'johnsmith': 'qwertyuioppoiuytrewq'
 
     context = {'form': form}
     return render(request, 'register.html', context)
 
 def reports(request):
-    context = {}
     runFile() 
     return render(request, 'capture.html', context)
 
 def capture(request):
     context={}
     return render(request, 'capture.html', context)
-
-
-# def graph(request):
-#     # get the data from the database and draw a graph using either DataFram or Matplotlib
-#     student = Student_report.objects.all()
-#     lecturer = Lecturer_report.objects.all()
-
-#     # create a dataframe from the data
-#     df = pd.DataFrame(student.values())
-#     df2 = pd.DataFrame(lecturer.values())
-#     plt.title('Attendance Analysis')
-#     plt.xlabel('Days')
-#     plt.ylabel('Attendance')
-#     plt.plot(df, df2)
-
-#     context = {
-#         'plot': plt.plot(df, df2)
-#     }
-
-#     return render(request, 'dashboard.html', context)
-
-# get first_name and last_name from auth_user table and compare with first_name and last_name from student_detail table if they match display in the dashboard
-# def student(request):
-    # if user is logged in:
-    # query all the data from student_detail table and destructure student
-    # student = Student_report.objects.all()
-    # # destructure student
-    # fname = student.first_name
-    # lname = student.last_name
-    # # student = Student_report.getStudentReport(name[0], name[1])
-
-    # # get total number of students in the Student_detail table
-    # total_students = Student_report.objects.count()
-    # # get first_name and last_name from auth_user table and destructure user
-    # user = request.user
-    # first_name = user.first_name
-    # last_name = user.last_name
-    # # compare first_name and last_name from auth_user table with first_name and last_name from student_detail table
-    # if fname == first_name and lname == last_name:
-    #     # query all the data from student_detail table
-    #     student = Student_report.objects.all()
-    #     # destructure student
-    #     fname = student.first_name
-    #     lname = student.last_name
-    #     regno = student.regno
-    #     course = student.course
-    #     picture = student.picture
-    #     # get total number of students in the Student_detail table
-    #     total_students = Student_report.objects.count()
-
-    #     context = {'student': student, 'total_students': total_students, 'fname': fname, 'lname': lname, 'regno': regno, 'course': course, 'picture': picture}
-    #     return render(request, 'dashboard.html', context)
-    # else:
-    #     return redirect('login_user')
-     
-  
-
 
 
 
