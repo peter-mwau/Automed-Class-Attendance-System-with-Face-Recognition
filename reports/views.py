@@ -59,14 +59,8 @@ def report(request):
 # response['Content-Disposition'] = 'attachment; filename="Attendance Report.pdf"'
     
     
-#     p.drawString(100, 100, "Hello world.dfklfdguytr")
-#     p.showPage()
-#     p.save()
-#     pdf = buffer.getvalue()
-#     buffer.close()
-#     response.write(pdf)
-#     print(response)
-#     return response
+
+
     
 
 

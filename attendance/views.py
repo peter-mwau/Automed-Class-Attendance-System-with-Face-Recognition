@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from django.contrib import messages
 import datetime
+from datetime import datetime, timedelta, date
+from django.db.models import Q
 
 from multiprocessing import context
 from xml.etree.ElementInclude import include
@@ -102,26 +104,35 @@ def home(request):
             # redirect to capture with camera as parameter
             # return redirect('reports', camera) 
 
+    now = datetime.now()
+
+    # Construct datetime range for today
+    start_of_day = datetime(now.year, now.month, now.day, 0, 0, 0)
+    end_of_day = start_of_day + timedelta(days=1)
+
     #  select from the students report table where the dateofattendance is today interms of datetime
-    today_student_attendance = Student_report.objects.filter(dateofattendance=datetime.date.today())
-    # print(today_student_attendance)  
+    today_student_attendance = Student_report.objects.filter(Q(dateofattendance=start_of_day) & Q(dateofattendance=end_of_day))
     # to print today's date in the format of year-month-day-hour-minute-second
     # print(datetime.date.today().strftime("%Y-%m-%d %H:%M:%S")) 
     # get the total number of students whose attendance has been taken today
     today_students = today_student_attendance.count()
-    # print(today_students)
     # select from the lecturers report table where the dateofattendance is today
-    today_lecturer_attendance = Lecturer_report.objects.filter(date=datetime.date.today())
+    today_lecturer_attendance = Lecturer_report.objects.filter(Q(date__gte=start_of_day) & Q(date__lt=end_of_day))
     # get the total number of lecturers whose attendance has been taken today
     today_lecturers = today_lecturer_attendance.count()
     today_attendance = today_lecturers + today_students
 
+    # Calculate date range for the past 7 days
+    end_date = date.today()
+    start_date = end_date - timedelta(days=7)
+
     # select from the students report table where the dateofattendance is last seven days
-    last_seven_days_student_attendance = Student_report.objects.filter(dateofattendance__range=[datetime.date.today() - datetime.timedelta(days=7), datetime.date.today()])
+    # last_seven_days_student_attendance = Student_report.objects.filter(dateofattendance__range=[datetime.date.today() - datetime.timedelta(days=7), datetime.date.today()])
+    last_seven_days_student_attendance = Student_report.objects.filter(Q(dateofattendance__gte=start_date) & Q(dateofattendance__lte=end_date))
     # get the total number of students whose attendance has been taken in the last seven days
     last_seven_days_students = last_seven_days_student_attendance.count()
     # select from the lecturers report table where the dateofattendance is last seven days
-    last_seven_days_lecturer_attendance = Lecturer_report.objects.filter(date__range=[datetime.date.today() - datetime.timedelta(days=7), datetime.date.today()])
+    last_seven_days_lecturer_attendance = Lecturer_report.objects.filter(Q(date__gte=start_date) & Q(date__lte=end_date))
     # get the total number of lecturers whose attendance has been taken in the last seven days
     last_seven_days_lecturers = last_seven_days_lecturer_attendance.count()
     week_attendance = last_seven_days_lecturers + last_seven_days_students
