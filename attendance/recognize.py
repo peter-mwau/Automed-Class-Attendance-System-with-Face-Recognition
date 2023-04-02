@@ -118,11 +118,11 @@ def runFile():
                         writer = csv.DictWriter(csvfile, fieldnames= csv_columns2)
                         for data in dict1 or dict:
                             writer.writerow(data)
-                            read_csv2(csv_name2)
-                           
-                            #reset user_exist to 0
-                            user_exist = 0
-                            f.truncate(0)
+                            # read_csv2(csv_name2)
+                        read_csv2(csv_name2)   
+                        #reset user_exist to 0
+                    user_exist = 0
+                    f.truncate(0)
                             
                    
                             
@@ -155,20 +155,27 @@ def runFile():
         facesCurFrame = face_recognition.face_locations(imgS)
         encodesCurFrame = face_recognition.face_encodings(imgS,facesCurFrame)
 
+        # totalMatches = 0
+        # correctMatches = 0
+
         for encodeFace,faceLoc in zip(encodesCurFrame,facesCurFrame):
             matches = face_recognition.compare_faces(encodeListKnown,encodeFace)
             faceDistance = face_recognition.face_distance(encodeListKnown,encodeFace)
             # print(faceDistance)
             matchIndex = np.argmin(faceDistance)
 
+            # totalMatches += 1
+
             if matches[matchIndex]:
                 name = classNames[matchIndex]
-                # print(name)
+                # correctMatches += 1
                 y1,x2,y2,x1 = faceLoc
                 y1, x2, y2, x1 = y1*4,x2*4,y2*4,x1*4
                 cv2.rectangle(img,(x1,y1),(x2,y2),(0,255,0),2)
                 cv2.rectangle(img,(x1,y2),(x2,y2),(0,255,0),cv2.FILLED)
+                # accuracy = round(correctMatches / totalMatches * 100, 2)
                 cv2.putText(img,name,(x1+6,y2-6),cv2.FONT_HERSHEY_COMPLEX,1,(0,0,0),2)
+                # cv2.putText(img, f"{name} ({accuracy}%)", (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
                 markAttendance(name)
             else:
                 y1, x2, y2, x1 = faceLoc
