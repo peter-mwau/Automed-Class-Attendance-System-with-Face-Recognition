@@ -119,10 +119,10 @@ def runFile():
                         for data in dict1 or dict:
                             writer.writerow(data)
                             # read_csv2(csv_name2)
-                        read_csv2(csv_name2)   
+                            read_csv2(csv_name2)   
                         #reset user_exist to 0
-                    user_exist = 0
-                    f.truncate(0)
+                            user_exist = 0
+                            f.truncate(0)
                             
                    
                             
