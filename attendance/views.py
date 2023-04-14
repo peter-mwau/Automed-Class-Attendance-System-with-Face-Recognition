@@ -126,14 +126,12 @@ def home(request):
     end_date = date.today()
     start_date = end_date - timedelta(days=7)
 
-    # select from the students report table where the dateofattendance is last seven days
-    # last_seven_days_student_attendance = Student_report.objects.filter(dateofattendance__range=[datetime.date.today() - datetime.timedelta(days=7), datetime.date.today()])
     last_seven_days_student_attendance = Student_report.objects.filter(Q(dateofattendance__gte=start_date))
-    # get the total number of students whose attendance has been taken in the last seven days
+
     last_seven_days_students = last_seven_days_student_attendance.count()
-    # select from the lecturers report table where the dateofattendance is last seven days
+
     last_seven_days_lecturer_attendance = Lecturer_report.objects.filter(Q(date__gte=start_date))
-    # get the total number of lecturers whose attendance has been taken in the last seven days
+
     last_seven_days_lecturers = last_seven_days_lecturer_attendance.count()
     week_attendance = last_seven_days_lecturers + last_seven_days_students
 

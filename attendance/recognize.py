@@ -136,6 +136,7 @@ def runFile():
  
     encodeListKnown = findEncodings(images) 
     print("Encoding Complete")
+    # print(encodeListKnown)
 
     capture = cv2.VideoCapture(0) 
     cv2.waitKey(1)
